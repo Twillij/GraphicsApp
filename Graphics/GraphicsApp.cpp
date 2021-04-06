@@ -32,8 +32,6 @@ bool GraphicsApp::startup()
 	// load shaders
 	phongShader.loadShader(eShaderStage::VERTEX, "./shaders/phong.vert");
 	phongShader.loadShader(eShaderStage::FRAGMENT, "./shaders/phong.frag");
-	textureShader.loadShader(eShaderStage::VERTEX, "./shaders/textured.vert");
-	textureShader.loadShader(eShaderStage::FRAGMENT, "./shaders/textured.frag");
 	normalShader.loadShader(eShaderStage::VERTEX, "./shaders/normalmap.vert");
 	normalShader.loadShader(eShaderStage::FRAGMENT, "./shaders/normalmap.frag");
 	postShader.loadShader(eShaderStage::VERTEX, "./shaders/post.vert");
@@ -43,11 +41,6 @@ bool GraphicsApp::startup()
 	if (phongShader.link() == false)
 	{
 		cout << "Phong shader link error: " << phongShader.getLastError() << endl;
-		return false;
-	}
-	if (textureShader.link() == false)
-	{
-		cout << "Texture shader link error: " << normalShader.getLastError() << endl;
 		return false;
 	}
 	if (normalShader.link() == false)
