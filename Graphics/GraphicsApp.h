@@ -1,9 +1,9 @@
 #pragma once
-
 #include "Application.h"
 #include <glm/mat4x4.hpp>
 
-class GraphicsApp : public aie::Application {
+class GraphicsApp : public aie::Application
+{
 public:
 
 	GraphicsApp() {}
@@ -18,6 +18,6 @@ public:
 protected:
 
 	// camera transforms
-	glm::mat4	m_viewMatrix;
-	glm::mat4	m_projectionMatrix;
+	glm::mat4	viewMatrix;
+	glm::mat4	projectionMatrix;
 };
