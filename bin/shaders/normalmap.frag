@@ -129,8 +129,8 @@ vec4 Point()
 
 	// calculate each colour property
 	vec3 ambient = Ia * Ka * ambientStrength;
-	vec3 diffuse = Id * Kd * lambertTerm;
-	vec3 specular = Is * Ks * specularTerm * specularStrength;
+	vec3 diffuse = Id * Kd * texDiffuse * lambertTerm;
+	vec3 specular = Is * Ks * texSpecular *specularTerm * specularStrength;
 
 	float distance = length( lightPosition - vec3( vPosition ) );
 	float attenuation = 1 / ( constant + linear * distance + quadratic * distance * distance );
@@ -139,6 +139,7 @@ vec4 Point()
 	diffuse *= attenuation;
 	specular *= attenuation;
 
+	// output final colour
 	return vec4( ambient + diffuse + specular, 1 );
 }
 

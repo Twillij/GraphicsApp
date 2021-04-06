@@ -23,13 +23,18 @@ bool GraphicsApp::startup()
 	// initialise lights
 	standardLight.position = { 0, 5, 0 };
 	standardLight.diffuse = { 1, 0, 1 };
-	directionalLight.diffuse = { 1, 1, 0 };
+	directionalLight.ambient = { 0.5f, 0.5f, 0.5f };
+	directionalLight.specularStrength = 1.0f;
+	directionalLight.specularPower = 2;
+	directionalLight.diffuse = { 1, 1, 1 };
 	pointLight.position = { -5, 10, 0 };
 	pointLight.diffuse = { 1, 1, 1 };
 
 	// load shaders
 	phongShader.loadShader(eShaderStage::VERTEX, "./shaders/phong.vert");
 	phongShader.loadShader(eShaderStage::FRAGMENT, "./shaders/phong.frag");
+	textureShader.loadShader(eShaderStage::VERTEX, "./shaders/textured.vert");
+	textureShader.loadShader(eShaderStage::FRAGMENT, "./shaders/textured.frag");
 	normalShader.loadShader(eShaderStage::VERTEX, "./shaders/normalmap.vert");
 	normalShader.loadShader(eShaderStage::FRAGMENT, "./shaders/normalmap.frag");
 	postShader.loadShader(eShaderStage::VERTEX, "./shaders/post.vert");
@@ -39,6 +44,11 @@ bool GraphicsApp::startup()
 	if (phongShader.link() == false)
 	{
 		cout << "Phong shader link error: " << phongShader.getLastError() << endl;
+		return false;
+	}
+	if (textureShader.link() == false)
+	{
+		cout << "Texture shader link error: " << normalShader.getLastError() << endl;
 		return false;
 	}
 	if (normalShader.link() == false)
@@ -148,6 +158,9 @@ void GraphicsApp::update(float deltaTime)
 
 void GraphicsApp::draw()
 {
+	// bind the render target
+	fullScreenRenderTarget.bind();
+
 	// wipe the screen to the background colour
 	clearScreen();
 
@@ -220,7 +233,7 @@ void GraphicsApp::draw()
 
 	// send camera's position to shader as uniform
 	normalShader.bindUniform("cameraPosition", flyCam.GetPosition());
-
+	
 	// bind light
 	normalShader.bindUniform("Ia", pointLight.ambient);
 	normalShader.bindUniform("Id", pointLight.diffuse);
@@ -250,7 +263,7 @@ void GraphicsApp::draw()
 
 	// bind post shader and textures
 	postShader.bind();
-	postShader.bindUniform("postEffect", 3); // 0: default, 1: blur, 2: distort
+	postShader.bindUniform("postEffect", 3); // 0: default, 1: blur, 2: distort, 3: thick outline
 	postShader.bindUniform("colourTarget", 0);
 	fullScreenRenderTarget.getTarget(0).bind(0);
 

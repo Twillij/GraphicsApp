@@ -30,6 +30,7 @@ protected:
 
 	// shaders
 	ShaderProgram phongShader;
+	ShaderProgram textureShader;
 	ShaderProgram normalShader;
 	ShaderProgram postShader;
 
