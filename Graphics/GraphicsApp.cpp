@@ -4,10 +4,10 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+using aie::Gizmos;
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
-using aie::Gizmos;
 
 bool GraphicsApp::startup()
 {
