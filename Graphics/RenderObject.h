@@ -1,7 +1,6 @@
 #pragma once
 #include "Camera.h"
 #include "OBJMesh.h"
-#include "Shader.h"
 #include <glm/matrix.hpp>
 
 using namespace aie;

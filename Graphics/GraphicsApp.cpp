@@ -21,6 +21,14 @@ bool GraphicsApp::startup()
 	flyCam.SetPerspective(radians(45.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
 	flyCam.SetLookAt(vec3(10, 10, 10), vec3(0, 0, 5), vec3(0, 1, 0));
 
+	// load shaders
+	phongShader.loadShader(eShaderStage::VERTEX, "./shaders/phong.vert");
+	phongShader.loadShader(eShaderStage::FRAGMENT, "./shaders/phong.frag");
+	normalShader.loadShader(eShaderStage::VERTEX, "./shaders/normalmap.vert");
+	normalShader.loadShader(eShaderStage::FRAGMENT, "./shaders/normalmap.frag");
+	postShader.loadShader(eShaderStage::VERTEX, "./shaders/post.vert");
+	postShader.loadShader(eShaderStage::FRAGMENT, "./shaders/post.frag");
+
 	return true;
 }
 
