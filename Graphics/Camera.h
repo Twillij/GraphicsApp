@@ -6,6 +6,9 @@ using namespace glm;
 class Camera
 {
 public:
+	Camera() {}
+	~Camera() {}
+
 	virtual void Update(float deltaTime) = 0;
 
 	void SetPerspective(float fieldOfView, float aspectRatio, float near, float far);
@@ -21,17 +24,18 @@ public:
 
 	void GetFrustumPlanes(const mat4& transform, vec4* planes);
 
-private:
-	mat4 worldTransform;
-	mat4 viewTransform;
-	mat4 projectionTransform;
-	mat4 projectionViewTransform;
-
-	vec3 position;
-	vec3 forward;
-	vec3 right;
-	vec3 up = vec3(0, 1, 0);
+protected:
+	vec3 position = vec3(0);
+	vec3 forward = { 0, 0, 1 };
+	vec3 right = { 1, 0, 0 };
+	vec3 up = { 0, 1, 0 };
 
 	void UpdateWorldTransform();
 	void UpdateProjectionViewTransform();
+
+private:
+	mat4 worldTransform = mat4(1);
+	mat4 viewTransform = mat4(1);
+	mat4 projectionTransform = mat4(1);
+	mat4 projectionViewTransform = mat4(1);
 };
