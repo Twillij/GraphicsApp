@@ -1,5 +1,6 @@
 #pragma once
-#include "Application.h"
+#include "FlyCamera.h"
+#include <Application.h>
 #include <glm/mat4x4.hpp>
 
 class GraphicsApp : public aie::Application
@@ -18,6 +19,8 @@ public:
 protected:
 
 	// camera transforms
-	glm::mat4	viewMatrix;
-	glm::mat4	projectionMatrix;
+	mat4 viewMatrix = mat4(1);
+	mat4 projectionMatrix = mat4(1);
+
+	FlyCamera flyCam;
 };

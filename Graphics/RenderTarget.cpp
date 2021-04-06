@@ -8,7 +8,11 @@ RenderTarget::RenderTarget()
 	: m_width(0),
 	m_height(0),
 	m_targetCount(0),
-	m_targets(nullptr) {
+	m_targets(nullptr),
+	m_depthTarget(0),
+	m_fbo(0),
+	m_rbo(0)
+{
 }
 
 RenderTarget::RenderTarget(unsigned int targetCount, unsigned int width, unsigned int height)
@@ -17,7 +21,8 @@ RenderTarget::RenderTarget(unsigned int targetCount, unsigned int width, unsigne
 	m_targetCount(0),
 	m_targets(nullptr),
     m_depthTarget(0),
-    m_rbo(0){
+    m_rbo(0)
+{
 	initialise(targetCount, width, height);
 }
 
