@@ -144,6 +144,11 @@ void GraphicsApp::update(float deltaTime)
 	// quit if we press escape
 	aie::Input* input = aie::Input::getInstance();
 
+	if (input->wasMouseButtonPressed(INPUT_MOUSE_BUTTON_LEFT))
+	{
+		postIndex = (postIndex < 3) ? postIndex + 1 : 0;
+	}
+
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 }
@@ -255,7 +260,7 @@ void GraphicsApp::draw()
 
 	// bind post shader and textures
 	postShader.bind();
-	postShader.bindUniform("postEffect", 3); // 0: default, 1: blur, 2: distort, 3: thick outline
+	postShader.bindUniform("postEffect", postIndex); // 0: default, 1: blur, 2: distort, 3: sobel
 	postShader.bindUniform("colourTarget", 0);
 	fullScreenRenderTarget.getTarget(0).bind(0);
 

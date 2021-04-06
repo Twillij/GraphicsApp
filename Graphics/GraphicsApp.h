@@ -50,4 +50,7 @@ protected:
 
 	// meshes for target rendering
 	Mesh fullScreenQuadMesh;
+
+	// post processing effect index
+	int postIndex = 3;
 };
