@@ -24,9 +24,8 @@ bool GraphicsApp::startup()
 	standardLight.position = { 0, 5, 0 };
 	standardLight.diffuse = { 1, 0, 1 };
 	directionalLight.ambient = { 0.5f, 0.5f, 0.5f };
-	directionalLight.specularStrength = 1.0f;
-	directionalLight.specularPower = 2;
-	directionalLight.diffuse = { 1, 1, 1 };
+	directionalLight.ambientStrength = 0.3f;
+	directionalLight.diffuse = { 1, 1, 0 };
 	pointLight.position = { -5, 10, 0 };
 	pointLight.diffuse = { 1, 1, 1 };
 
@@ -144,7 +143,7 @@ void GraphicsApp::update(float deltaTime)
 	directionalLight.direction = normalize(vec3(cosf(time * 2), sinf(time * 2), 0));
 
 	// rotate the point light
-	pointLight.position = { -5, 5, cosf(time) * -3 + 10 };
+	pointLight.position = { -5, 5, cosf(time * 2) * -3 + 10 };
 
 	// update the camera
 	flyCam.Update(deltaTime);
