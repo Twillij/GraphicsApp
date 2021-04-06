@@ -1,13 +1,12 @@
 // simple post-processing vertex shader
 #version 410
 
-layout( location = 0 ) in vec2 Position;
+layout( location = 0 ) in vec4 Position;
 
 out vec2 vTexCoord;
 
 void main()
 {
-	// generate texture coordinates
-	vTexCoord = Position * 0.5f + 0.5f;
-	gl_Position = vec4( Position, 0, 1 );
+	vTexCoord = vec2( Position ) * 0.5f + 0.5f;
+	gl_Position = vec4( vec2( Position ), 0, 1 );
 }

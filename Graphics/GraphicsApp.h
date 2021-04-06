@@ -1,6 +1,8 @@
 #pragma once
 #include "FlyCamera.h"
+#include "Mesh.h"
 #include "RenderObject.h"
+#include "RenderTarget.h"
 #include "Shader.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -42,4 +44,10 @@ protected:
 	RenderObject dragon;
 	RenderObject spear;
 	RenderObject statuette;
+
+	// render targets
+	RenderTarget fullScreenRenderTarget;
+
+	// meshes for target rendering
+	Mesh fullScreenQuadMesh;
 };
