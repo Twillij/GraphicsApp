@@ -1,4 +1,6 @@
 #pragma once
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/matrix.hpp>
 
 using namespace glm;

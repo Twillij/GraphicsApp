@@ -14,7 +14,7 @@ RenderObject::RenderObject()
 	};
 }
 
-mat4 RenderObject::GetPVM(Camera* camera)
+mat4 RenderObject::GetProjectionViewMatrix(Camera* camera)
 {
     return camera->GetProjectionViewTransform() * transform;
 }

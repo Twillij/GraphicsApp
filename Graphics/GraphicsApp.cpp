@@ -16,9 +16,10 @@ bool GraphicsApp::startup()
 	// initialise gizmo primitive counts
 	Gizmos::create(10000, 10000, 10000, 10000);
 
-	// create simple camera transforms
-	viewMatrix = lookAt(vec3(10), vec3(0), vec3(0, 1, 0));
-	projectionMatrix = perspective(pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.0f);
+	// initialise main camera
+	flyCam.SetSpeed(5.0f);
+	flyCam.SetPerspective(radians(45.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
+	flyCam.SetLookAt(vec3(10, 10, 10), vec3(0, 0, 5), vec3(0, 1, 0));
 
 	return true;
 }
@@ -49,6 +50,9 @@ void GraphicsApp::update(float deltaTime)
 	// add a transform so that we can see the axis
 	Gizmos::addTransform(mat4(1));
 
+	// update the camera
+	flyCam.Update(deltaTime);
+
 	// quit if we press escape
 	aie::Input* input = aie::Input::getInstance();
 
@@ -61,8 +65,5 @@ void GraphicsApp::draw()
 	// wipe the screen to the background colour
 	clearScreen();
 
-	// update perspective based on screen size
-	projectionMatrix = perspective(pi<float>() * 0.25f, getWindowWidth() / (float)getWindowHeight(), 0.1f, 1000.0f);
-
-	Gizmos::draw(projectionMatrix * viewMatrix);
+	Gizmos::draw(flyCam.GetProjectionViewTransform());
 }

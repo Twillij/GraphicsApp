@@ -18,9 +18,5 @@ public:
 
 protected:
 
-	// camera transforms
-	mat4 viewMatrix = mat4(1);
-	mat4 projectionMatrix = mat4(1);
-
 	FlyCamera flyCam;
 };
