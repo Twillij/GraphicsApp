@@ -140,7 +140,7 @@ vec3 CalculateDirLight( DirLight light )
 
 	// calculate each light property
 	vec3 ambient = light.ambient * Ks * light.ambientStrength;
-	vec3 diffuse = light.diffuse * Kd * texDiffuse * lambertTerm;
+	vec3 diffuse = light.diffuse * Kd * texDiffuse * lambertTerm * light.diffuseStrength;
 	vec3 specular = light.specular * Ks * texSpecular * specularTerm * light.specularStrength;
 
 	// output final colour

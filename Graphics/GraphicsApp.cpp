@@ -22,13 +22,15 @@ bool GraphicsApp::startup()
 
 	// initialise lights
 	standardLight.position = { 0, 5, 0 };
-	standardLight.diffuse = { 0.5f, 0.5f, 0 };
-	directionalLight.diffuse = { 1, 1, 1 };
-	pointLight1.diffuse = { 1, 0, 0 };
-	pointLight2.diffuse = { 1, 0.5f, 0 };
-	pointLight3.diffuse = { 0, 1, 1 };
+	standardLight.diffuse = { 0.5f, 0.5f, 0.0f };
+	directionalLight.diffuse = { 1.0f, 1.0f, 1.0f };
+	pointLight1.diffuse = { 0.5f, 0.5f, 0.0f };
+	pointLight1.diffuseStrength = 5;
+	pointLight2.diffuse = { 0.0f, 0.0f, 1.0f };
+	pointLight2.diffuseStrength = 5;
+	pointLight3.diffuse = { 0.0f, 1.0f, 1.0f };
 	pointLight3.diffuseStrength = 5;
-	pointLight4.diffuse = { 1, 0, 0 };
+	pointLight4.diffuse = { 1.0f, 0.0f, 0.0f };
 	pointLight4.diffuseStrength = 5;
 
 	// load shaders
