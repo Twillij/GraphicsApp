@@ -25,6 +25,7 @@ public:
 	vec3 specular = { 1, 1, 0 };
 
 	float ambientStrength = 0.1f;
+	float diffuseStrength = 2.5f;
 	float specularStrength = 0.5f;
 	int specularPower = 32;
 

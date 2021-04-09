@@ -27,7 +27,9 @@ bool GraphicsApp::startup()
 	pointLight1.diffuse = { 1, 0, 0 };
 	pointLight2.diffuse = { 1, 0.5f, 0 };
 	pointLight3.diffuse = { 0, 1, 1 };
+	pointLight3.diffuseStrength = 5;
 	pointLight4.diffuse = { 1, 0, 0 };
+	pointLight4.diffuseStrength = 5;
 
 	// load shaders
 	phongShader.loadShader(eShaderStage::VERTEX, "./shaders/phong.vert");
@@ -65,19 +67,11 @@ bool GraphicsApp::startup()
 	fullScreenQuadMesh.InitialiseFullScreenQuad();
 
 	// initiliase object meshes
-	angel.LoadMesh("./stanford/lucy.obj");
 	dragon.LoadMesh("./stanford/dragon.obj");
 	spear.LoadMesh("./soulspear/soulspear.obj", true, true);
 	statuette.LoadMesh("./statuette/statuette.obj", true, true);
 
 	// initialise object transforms
-	angel.transform =
-	{
-		0.5f, 0, 0, 0,
-		0, 0.5f, 0, 0,
-		0, 0, 0.5f, 0,
-		-5, 0, 5, 1
-	};
 	dragon.transform =
 	{
 		0.5f, 0, 0, 0,
@@ -131,9 +125,6 @@ void GraphicsApp::update(float deltaTime)
 
 	// query time since app started
 	float time = getTime();
-
-	// rotate the directional light's direction
-	//directionalLight.direction = normalize(vec3(cosf(time * 2), sinf(time * 2), 0));
 
 	// rotate the point lights
 	pointLight1.position = vec3(cosf(time) * 2, 5, sinf(time) * 2);
@@ -209,6 +200,7 @@ void GraphicsApp::draw()
 	normalShader.bindUniform("dirLights[0].diffuse", directionalLight.diffuse);
 	normalShader.bindUniform("dirLights[0].specular", directionalLight.specular);
 	normalShader.bindUniform("dirLights[0].ambientStrength", directionalLight.ambientStrength);
+	normalShader.bindUniform("dirLights[0].diffuseStrength", directionalLight.diffuseStrength);
 	normalShader.bindUniform("dirLights[0].specularStrength", directionalLight.specularStrength);
 	normalShader.bindUniform("dirLights[0].specularPower", directionalLight.specularPower);
 	normalShader.bindUniform("dirLights[0].direction", directionalLight.direction);
@@ -221,6 +213,7 @@ void GraphicsApp::draw()
 	normalShader.bindUniform("pointLights[0].diffuse", pointLight1.diffuse);
 	normalShader.bindUniform("pointLights[0].specular", pointLight1.specular);
 	normalShader.bindUniform("pointLights[0].ambientStrength", pointLight1.ambientStrength);
+	normalShader.bindUniform("pointLights[0].diffuseStrength", pointLight1.diffuseStrength);
 	normalShader.bindUniform("pointLights[0].specularStrength", pointLight1.specularStrength);
 	normalShader.bindUniform("pointLights[0].specularPower", pointLight1.specularPower);
 	normalShader.bindUniform("pointLights[0].constant", pointLight1.constant);
@@ -235,6 +228,7 @@ void GraphicsApp::draw()
 	normalShader.bindUniform("pointLights[1].diffuse", pointLight2.diffuse);
 	normalShader.bindUniform("pointLights[1].specular", pointLight2.specular);
 	normalShader.bindUniform("pointLights[1].ambientStrength", pointLight2.ambientStrength);
+	normalShader.bindUniform("pointLights[1].diffuseStrength", pointLight2.diffuseStrength);
 	normalShader.bindUniform("pointLights[1].specularStrength", pointLight2.specularStrength);
 	normalShader.bindUniform("pointLights[1].specularPower", pointLight2.specularPower);
 	normalShader.bindUniform("pointLights[1].constant", pointLight2.constant);
@@ -249,6 +243,7 @@ void GraphicsApp::draw()
 	normalShader.bindUniform("pointLights[2].diffuse", pointLight3.diffuse);
 	normalShader.bindUniform("pointLights[2].specular", pointLight3.specular);
 	normalShader.bindUniform("pointLights[2].ambientStrength", pointLight3.ambientStrength);
+	normalShader.bindUniform("pointLights[2].diffuseStrength", pointLight3.diffuseStrength);
 	normalShader.bindUniform("pointLights[2].specularStrength", pointLight3.specularStrength);
 	normalShader.bindUniform("pointLights[2].specularPower", pointLight3.specularPower);
 	normalShader.bindUniform("pointLights[2].constant", pointLight3.constant);
@@ -263,6 +258,7 @@ void GraphicsApp::draw()
 	normalShader.bindUniform("pointLights[3].diffuse", pointLight4.diffuse);
 	normalShader.bindUniform("pointLights[3].specular", pointLight4.specular);
 	normalShader.bindUniform("pointLights[3].ambientStrength", pointLight4.ambientStrength);
+	normalShader.bindUniform("pointLights[3].diffuseStrength", pointLight4.diffuseStrength);
 	normalShader.bindUniform("pointLights[3].specularStrength", pointLight4.specularStrength);
 	normalShader.bindUniform("pointLights[3].specularPower", pointLight4.specularPower);
 	normalShader.bindUniform("pointLights[3].constant", pointLight4.constant);
@@ -307,6 +303,9 @@ void GraphicsApp::draw()
 	// draw the lights
 	standardLight.Draw();
 	pointLight1.Draw();
+	pointLight2.Draw();
+	pointLight3.Draw();
+	pointLight4.Draw();
 
 	Gizmos::draw(flyCam.GetProjectionViewTransform());
 }

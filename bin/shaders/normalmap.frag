@@ -173,7 +173,7 @@ vec3 CalculatePointLight(PointLight light)
 
 	// calculate each colour property
 	vec3 ambient = light.ambient * Ka * light.ambientStrength;
-	vec3 diffuse = light.diffuse * Kd * texDiffuse * lambertTerm * 5;
+	vec3 diffuse = light.diffuse * Kd * texDiffuse * lambertTerm * light.diffuseStrength;
 	vec3 specular = light.specular * Ks * texSpecular * specularTerm * light.specularStrength;
 
 	float distance = length( light.position - vec3( vPosition ) );
