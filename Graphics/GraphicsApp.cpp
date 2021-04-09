@@ -22,7 +22,7 @@ bool GraphicsApp::startup()
 
 	// initialise lights
 	standardLight.position = { 0, 5, 0 };
-	standardLight.diffuse = { 0, 1, 0 };
+	standardLight.diffuse = { 0.5f, 0.5f, 0 };
 	directionalLight.diffuse = { 1, 1, 1 };
 	pointLight1.diffuse = { 1, 0, 0 };
 	pointLight2.diffuse = { 1, 0.5f, 0 };

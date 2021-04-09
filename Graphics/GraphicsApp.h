@@ -40,7 +40,6 @@ protected:
 	PointLight pointLight2;
 	PointLight pointLight3;
 	PointLight pointLight4;
-	SpotLight spotLight;
 
 	// render objects
 	RenderObject angel;
