@@ -1,17 +1,47 @@
 // a normal map fragment shader
 #version 410
+#define POINT_LIGHTS_COUNT 2
 
 in vec2 vTexCoord;
 in vec3 vNormal;
 in vec3 vTangent;
 in vec3 vBiTangent;
 in vec4 vPosition;
-
 out vec4 FragColour;
+
+struct DirLight
+{
+	vec3 direction;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+struct PointLight
+{
+	vec3 position;
+
+	float constant;
+	float linear;
+	float quadratic;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
+	float ambientStrength;
+	float diffuseStrength;
+	float specularStrength;
+
+	int specularPower;
+};
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D normalTexture;
+
+uniform PointLight pointLights[POINT_LIGHTS_COUNT];
 
 uniform int lightType; // the type of light used
 
@@ -32,12 +62,7 @@ uniform vec3 cameraPosition;
 // only used when using a directional light
 uniform vec3 lightDirection;
 
-// only used when using a point light
-uniform float constant;
-uniform float linear;
-uniform float quadratic;
-
-vec4 Standard()
+vec3 Standard()
 {
 	vec3 N = normalize( vNormal );
 	vec3 T = normalize( vTangent );
@@ -67,10 +92,10 @@ vec4 Standard()
 	vec3 specular = Is * Ks * texSpecular * specularTerm * specularStrength;
 
 	// output final colour
-	return vec4( ambient + diffuse + specular, 1 );
+	return ambient + diffuse + specular;
 }
 
-vec4 Directional()
+vec3 Directional()
 {
 	vec3 N = normalize( vNormal );
 	vec3 T = normalize( vTangent );
@@ -100,15 +125,15 @@ vec4 Directional()
 	vec3 specular = Is * Ks * texSpecular * specularTerm * specularStrength;
 
 	// output final colour
-	return vec4( ambient + diffuse + specular, 1 );
+	return ambient + diffuse + specular;
 }
 
-vec4 Point()
+vec3 CalculatePointLight(PointLight light)
 {
 	vec3 N = normalize( vNormal );
 	vec3 T = normalize( vTangent );
 	vec3 B = normalize( vBiTangent );
-	vec3 L = normalize( vec3( vPosition ) - lightPosition );
+	vec3 L = normalize( vec3( vPosition ) - light.position );
 
 	vec3 texDiffuse = texture( diffuseTexture, vTexCoord ).rgb;
 	vec3 texSpecular = texture( specularTexture, vTexCoord ).rgb;
@@ -125,36 +150,44 @@ vec4 Point()
 	vec3 R = reflect( L, N );
 
 	// calculate specular term
-	float specularTerm = pow( max( 0, dot( R, V )), specularPower );
+	float specularTerm = pow( max( 0, dot( R, V )), light.specularPower );
 
 	// calculate each colour property
-	vec3 ambient = Ia * Ka * ambientStrength;
-	vec3 diffuse = Id * Kd * texDiffuse * lambertTerm;
-	vec3 specular = Is * Ks * texSpecular *specularTerm * specularStrength;
+	vec3 ambient = light.ambient * Ka * light.ambientStrength;
+	vec3 diffuse = light.diffuse * Kd * texDiffuse * lambertTerm * 5;
+	vec3 specular = light.specular * Ks * texSpecular * specularTerm * light.specularStrength;
 
-	float distance = length( lightPosition - vec3( vPosition ) );
-	float attenuation = 1 / ( constant + linear * distance + quadratic * distance * distance );
+	float distance = length( light.position - vec3( vPosition ) );
+	float attenuation = 1 / ( light.constant + light.linear * distance + light.quadratic * distance * distance );
 
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	specular *= attenuation;
 
 	// output final colour
-	return vec4( ambient + diffuse + specular, 1 );
+	return ambient + diffuse + specular;
 }
 
 void main()
 {
+	//vec3 norm = normalize(Normal);
+	vec3 result;
+	
 	if ( lightType == 1 )
 	{
-		FragColour = Directional();
+		result = Directional();
 	}
 	else if ( lightType == 2 )
 	{
-		FragColour = Point();
+		for (int i = 0; i < POINT_LIGHTS_COUNT; ++i)
+		{
+			result += CalculatePointLight( pointLights[i] );
+		}
 	}
 	else
 	{
-		FragColour = Standard();
+		result = Standard();
 	}
+
+	FragColour = vec4(result, 1);
 }
