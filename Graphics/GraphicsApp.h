@@ -36,7 +36,8 @@ protected:
 	// lights
 	Light standardLight;
 	DirectionalLight directionalLight;
-	PointLight pointLight;
+	PointLight pointLight1;
+	PointLight pointLight2;
 	SpotLight spotLight;
 
 	// render objects

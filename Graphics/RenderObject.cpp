@@ -14,6 +14,11 @@ RenderObject::RenderObject()
 	};
 }
 
+vec3 RenderObject::GetPosition()
+{
+	return transform[3];
+}
+
 mat4 RenderObject::GetProjectionViewMatrix(Camera* camera)
 {
     return camera->GetProjectionViewTransform() * transform;

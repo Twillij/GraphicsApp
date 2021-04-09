@@ -14,6 +14,7 @@ public:
 	mat4 transform = mat4(1);
 	OBJMesh mesh;
 
+	vec3 GetPosition();
 	mat4 GetProjectionViewMatrix(Camera* camera);
 
 	bool LoadMesh(const char* filename, bool loadTextures = true, bool flipTextureV = false);
