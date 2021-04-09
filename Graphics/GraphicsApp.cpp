@@ -22,12 +22,12 @@ bool GraphicsApp::startup()
 
 	// initialise lights
 	standardLight.position = { 0, 5, 0 };
-	standardLight.diffuse = { 1, 0, 1 };
-	directionalLight.ambient = { 0.5f, 0.5f, 0.5f };
-	directionalLight.ambientStrength = 0.3f;
-	directionalLight.diffuse = { 1, 1, 0 };
-	pointLight1.diffuse = { 0, 0, 1 };
-	pointLight2.diffuse = { 1, 0, 0 };
+	standardLight.diffuse = { 0, 1, 0 };
+	directionalLight.diffuse = { 1, 1, 1 };
+	pointLight1.diffuse = { 1, 0, 0 };
+	pointLight2.diffuse = { 1, 0.5f, 0 };
+	pointLight3.diffuse = { 0, 1, 1 };
+	pointLight4.diffuse = { 1, 0, 0 };
 
 	// load shaders
 	phongShader.loadShader(eShaderStage::VERTEX, "./shaders/phong.vert");
@@ -133,14 +133,17 @@ void GraphicsApp::update(float deltaTime)
 	float time = getTime();
 
 	// rotate the directional light's direction
-	directionalLight.direction = normalize(vec3(cosf(time * 2), sinf(time * 2), 0));
+	//directionalLight.direction = normalize(vec3(cosf(time * 2), sinf(time * 2), 0));
 
 	// rotate the point lights
-	pointLight1.position = { -5, 5, cosf(time * 2) * -3 + 9 };
-	pointLight1.position = vec3(cosf(time * 2) * 2, 5, sinf(time * 2) * 2);
+	pointLight1.position = vec3(cosf(time) * 2, 5, sinf(time) * 2);
 	pointLight1.position += statuette.GetPosition();
-	pointLight2.position = vec3(-cosf(time * 2) * 4, 2, sinf(time * 2) * 4);
+	pointLight2.position = vec3(-cosf(time) * 5, 2, -sinf(time) * 5);
 	pointLight2.position += statuette.GetPosition();
+	pointLight3.position = vec3(cosf(time), 2, sinf(time));
+	pointLight3.position += spear.GetPosition();
+	pointLight4.position = vec3(-cosf(time), 2, -sinf(time));
+	pointLight4.position += spear.GetPosition();
 
 	// update the camera
 	flyCam.Update(deltaTime);
@@ -198,20 +201,73 @@ void GraphicsApp::draw()
 	// bind normal map shader program
 	normalShader.bind();
 
-	// indicate the light type to the shader
-	normalShader.bindUniform("lightType", directionalLight.GetLightType());
-
 	// send camera's position to shader as uniform
 	normalShader.bindUniform("cameraPosition", flyCam.GetPosition());
 
-	// bind light
-	normalShader.bindUniform("Ia", directionalLight.ambient);
-	normalShader.bindUniform("Id", directionalLight.diffuse);
-	normalShader.bindUniform("Is", directionalLight.specular);
-	normalShader.bindUniform("ambientStrength", directionalLight.ambientStrength);
-	normalShader.bindUniform("specularStrength", directionalLight.specularStrength);
-	normalShader.bindUniform("specularPower", directionalLight.specularPower);
-	normalShader.bindUniform("lightDirection", directionalLight.direction);
+	// bind directional light's variables
+	normalShader.bindUniform("dirLights[0].ambient", directionalLight.ambient);
+	normalShader.bindUniform("dirLights[0].diffuse", directionalLight.diffuse);
+	normalShader.bindUniform("dirLights[0].specular", directionalLight.specular);
+	normalShader.bindUniform("dirLights[0].ambientStrength", directionalLight.ambientStrength);
+	normalShader.bindUniform("dirLights[0].specularStrength", directionalLight.specularStrength);
+	normalShader.bindUniform("dirLights[0].specularPower", directionalLight.specularPower);
+	normalShader.bindUniform("dirLights[0].direction", directionalLight.direction);
+
+	// send point light's position to shader as uniform
+	normalShader.bindUniform("pointLights[0].position", pointLight1.position);
+
+	// bind point light's variables
+	normalShader.bindUniform("pointLights[0].ambient", pointLight1.ambient);
+	normalShader.bindUniform("pointLights[0].diffuse", pointLight1.diffuse);
+	normalShader.bindUniform("pointLights[0].specular", pointLight1.specular);
+	normalShader.bindUniform("pointLights[0].ambientStrength", pointLight1.ambientStrength);
+	normalShader.bindUniform("pointLights[0].specularStrength", pointLight1.specularStrength);
+	normalShader.bindUniform("pointLights[0].specularPower", pointLight1.specularPower);
+	normalShader.bindUniform("pointLights[0].constant", pointLight1.constant);
+	normalShader.bindUniform("pointLights[0].linear", pointLight1.linear);
+	normalShader.bindUniform("pointLights[0].quadratic", pointLight1.quadratic);
+
+	// send point light's position to shader as uniform
+	normalShader.bindUniform("pointLights[1].position", pointLight2.position);
+
+	// bind point light's variables
+	normalShader.bindUniform("pointLights[1].ambient", pointLight2.ambient);
+	normalShader.bindUniform("pointLights[1].diffuse", pointLight2.diffuse);
+	normalShader.bindUniform("pointLights[1].specular", pointLight2.specular);
+	normalShader.bindUniform("pointLights[1].ambientStrength", pointLight2.ambientStrength);
+	normalShader.bindUniform("pointLights[1].specularStrength", pointLight2.specularStrength);
+	normalShader.bindUniform("pointLights[1].specularPower", pointLight2.specularPower);
+	normalShader.bindUniform("pointLights[1].constant", pointLight2.constant);
+	normalShader.bindUniform("pointLights[1].linear", pointLight2.linear);
+	normalShader.bindUniform("pointLights[1].quadratic", pointLight2.quadratic);
+
+	// send point light's position to shader as uniform
+	normalShader.bindUniform("pointLights[2].position", pointLight3.position);
+
+	// bind point light's variables
+	normalShader.bindUniform("pointLights[2].ambient", pointLight3.ambient);
+	normalShader.bindUniform("pointLights[2].diffuse", pointLight3.diffuse);
+	normalShader.bindUniform("pointLights[2].specular", pointLight3.specular);
+	normalShader.bindUniform("pointLights[2].ambientStrength", pointLight3.ambientStrength);
+	normalShader.bindUniform("pointLights[2].specularStrength", pointLight3.specularStrength);
+	normalShader.bindUniform("pointLights[2].specularPower", pointLight3.specularPower);
+	normalShader.bindUniform("pointLights[2].constant", pointLight3.constant);
+	normalShader.bindUniform("pointLights[2].linear", pointLight3.linear);
+	normalShader.bindUniform("pointLights[2].quadratic", pointLight3.quadratic);
+
+	// send point light's position to shader as uniform
+	normalShader.bindUniform("pointLights[3].position", pointLight4.position);
+
+	// bind point light's variables
+	normalShader.bindUniform("pointLights[3].ambient", pointLight4.ambient);
+	normalShader.bindUniform("pointLights[3].diffuse", pointLight4.diffuse);
+	normalShader.bindUniform("pointLights[3].specular", pointLight4.specular);
+	normalShader.bindUniform("pointLights[3].ambientStrength", pointLight4.ambientStrength);
+	normalShader.bindUniform("pointLights[3].specularStrength", pointLight4.specularStrength);
+	normalShader.bindUniform("pointLights[3].specularPower", pointLight4.specularPower);
+	normalShader.bindUniform("pointLights[3].constant", pointLight4.constant);
+	normalShader.bindUniform("pointLights[3].linear", pointLight4.linear);
+	normalShader.bindUniform("pointLights[3].quadratic", pointLight4.quadratic);
 
 	// bind transform
 	normalShader.bindUniform("ProjectionViewModel", spear.GetProjectionViewMatrix(&flyCam));
@@ -223,43 +279,6 @@ void GraphicsApp::draw()
 	// draw the spear
 	spear.Draw();
 
-	// bind normal map shader program
-	normalShader.bind();
-
-	// send camera's position to shader as uniform
-	normalShader.bindUniform("cameraPosition", flyCam.GetPosition());
-
-	// indicate the light type to the shader
-	normalShader.bindUniform("lightType", pointLight1.GetLightType());
-
-	// send light's position to shader as uniform
-	normalShader.bindUniform("pointLights[0].position", pointLight1.position);
-
-	// bind light
-	normalShader.bindUniform("pointLights[0].ambient", pointLight1.ambient);
-	normalShader.bindUniform("pointLights[0].diffuse", pointLight1.diffuse);
-	normalShader.bindUniform("pointLights[0].specular", pointLight1.specular);
-	normalShader.bindUniform("pointLights[0].ambientStrength", pointLight1.ambientStrength);
-	normalShader.bindUniform("pointLights[0].specularStrength", pointLight1.specularStrength);
-	normalShader.bindUniform("pointLights[0].specularPower", pointLight1.specularPower);
-	normalShader.bindUniform("pointLights[0].constant", pointLight1.constant);
-	normalShader.bindUniform("pointLights[0].linear", pointLight1.linear);
-	normalShader.bindUniform("pointLights[0].quadratic", pointLight1.quadratic);
-
-	// send light's position to shader as uniform
-	normalShader.bindUniform("pointLights[1].position", pointLight2.position);
-
-	// bind light
-	normalShader.bindUniform("pointLights[1].ambient", pointLight2.ambient);
-	normalShader.bindUniform("pointLights[1].diffuse", pointLight2.diffuse);
-	normalShader.bindUniform("pointLights[1].specular", pointLight2.specular);
-	normalShader.bindUniform("pointLights[1].ambientStrength", pointLight2.ambientStrength);
-	normalShader.bindUniform("pointLights[1].specularStrength", pointLight2.specularStrength);
-	normalShader.bindUniform("pointLights[1].specularPower", pointLight2.specularPower);
-	normalShader.bindUniform("pointLights[1].constant", pointLight2.constant);
-	normalShader.bindUniform("pointLights[1].linear", pointLight2.linear);
-	normalShader.bindUniform("pointLights[1].quadratic", pointLight2.quadratic);
-
 	// bind transform
 	normalShader.bindUniform("ProjectionViewModel", statuette.GetProjectionViewMatrix(&flyCam));
 
@@ -269,7 +288,7 @@ void GraphicsApp::draw()
 
 	// draw the spear
 	statuette.Draw();
-
+	
 	// unbind target to return to backbuffer
 	fullScreenRenderTarget.unbind();
 
